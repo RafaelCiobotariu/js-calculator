@@ -1,0 +1,61 @@
+*, *::before, *::after{
+    box-sizing: border-box;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif , sans-serif;
+    font-weight: normal;
+}
+
+body{
+    padding: 0;
+    margin: 0;
+    background: linear-gradient(to right, rgba(146, 163, 122, 0.383), rgb(166, 131, 131));
+}
+
+.calculator-grid{
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    min-height: 100vh;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: minmax(120px, auto) repeat(5, 100px);
+}
+
+.calculator-grid > button{
+    cursor: pointer;
+    font-size: 2rem;
+    border: 1px solid white;
+    outline: none;
+    background-color: rgba(255, 255, 255, .75);
+}
+
+.calculator-grid > button:hover{
+    background-color: rgba(255, 255, 255, .99);
+
+}
+
+.span-2{
+    grid-column: span 2;
+}
+
+.display{
+    grid-column: 1 / -1;
+    background-color: rgba(0, 0 ,0, .75);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    flex-direction: column;
+    padding: 10px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.display .previous_number{
+    color: rgba(255, 255, 255, .75);
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.display .current_number{
+    color: white;
+    font-size: 2.5rem;
+    margin: 0;
+}
