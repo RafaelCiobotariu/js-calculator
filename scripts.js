@@ -36,39 +36,40 @@ function operate(operand, number1, number2) {
       inserted_operations = 1;
       return multiply(number1, number2);
     default:
-      return "You did not insert a propper operation";
+      break;
   }
 }
 
-for (let key of keys) {
-  const value = key.dataset.key;
-  key.addEventListener("click", () => {
-    console.log(value);
-    if (value === "clear") {
-      input = "";
-      currentNumber.innerHTML = "";
-      previousNumber.innerHTML = "";
-    } else if (value === "backspace") {
-      input = input.slice(0, -1);
-      previousNumber.innerHTML = cleanInput(input);
-    } else if (value === "=") {
-      let number = parseFloat(input, 10);
-      let secondNumber = parseFloat(getSecondNumber(input), 10);
-      // verifyOperation(input);
-      // let result = eval(input);
-      let result = operate(verifyOperation(input), number, secondNumber);
-      if (result !== NaN && result !== undefined && result !== null) {
-        currentNumber.innerHTML = cleanOutput(result);
-      } else {
-        currentNumber.innerHTML = "You did in insert a propper operation";
-      }
-    } else {
-      if (validateInput(value)) {
-        input += value;
+function calculator() {
+  for (let key of keys) {
+    const value = key.dataset.key;
+    key.addEventListener("click", () => {
+      if (value === "clear") {
+        input = "";
+        currentNumber.innerHTML = "";
+        previousNumber.innerHTML = "";
+      } else if (value === "backspace") {
+        input = input.slice(0, -1);
         previousNumber.innerHTML = cleanInput(input);
+      } else if (value === "=") {
+        let number = parseFloat(input, 10);
+        let secondNumber = parseFloat(getSecondNumber(input), 10);
+        let result = operate(verifyOperation(input), number, secondNumber);
+        if (!isNaN(result)) {
+          currentNumber.innerHTML = cleanOutput(result);
+        } else {
+          currentNumber.innerHTML = "You did not insert a propper operation";
+          previousNumber.innerHTML = "";
+          input = "";
+        }
+      } else {
+        if (validateInput(value)) {
+          input += value;
+          previousNumber.innerHTML = cleanInput(input);
+        }
       }
-    }
-  });
+    });
+  }
 }
 
 function cleanInput(input) {
@@ -91,23 +92,21 @@ function cleanInput(input) {
 
 function cleanOutput(currentNumber) {
   let output_string = currentNumber.toString();
-  let decimal = output_string.split(".")[1];
-  output_string = output_string.split(".")[0];
-
   let output_array = output_string.split("");
-  if (inserted_operations == 1) {
+  if (inserted_operations === 1) {
+    let decimal = output_string.split(".")[1];
+    output_string = output_string.split(".")[0];
+
     if (output_array.length > 3) {
       for (let i = output_array.length - 3; i > 0; i -= 3) {
         output_array.splice(i, 0, ",");
       }
     }
+    if (decimal) {
+      output_array.push(".");
+      output_array.push(decimal);
+    }
   }
-
-  if (decimal) {
-    output_array.push(".");
-    output_array.push(decimal);
-  }
-
   return output_array.join("");
 }
 
@@ -164,3 +163,5 @@ function getSecondNumber(input) {
   let numbers = input.split(`${verifyOperation(input)}`);
   return numbers[numbers.length - 1];
 }
+
+calculator();
