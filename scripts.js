@@ -41,6 +41,7 @@ function operate(operand, number1, number2) {
 }
 
 function calculator() {
+  let input = "";
   for (let key of keys) {
     const value = key.dataset.key;
     key.addEventListener("click", () => {
@@ -52,15 +53,16 @@ function calculator() {
         input = input.slice(0, -1);
         previousNumber.innerHTML = cleanInput(input);
       } else if (value === "=") {
-        let number = parseFloat(input, 10);
+        let firstNumber = parseFloat(getFirstNumber(input), 10);
         let secondNumber = parseFloat(getSecondNumber(input), 10);
-        let result = operate(verifyOperation(input), number, secondNumber);
+        console.log(firstNumber + " ", secondNumber);
+        let result = operate(verifyOperation(input), firstNumber, secondNumber);
         if (!isNaN(result)) {
           currentNumber.innerHTML = cleanOutput(result);
+          calculator();
         } else {
           currentNumber.innerHTML = "You did not insert a propper operation";
-          previousNumber.innerHTML = "";
-          input = "";
+          calculator();
         }
       } else {
         if (validateInput(value)) {
@@ -93,18 +95,12 @@ function cleanInput(input) {
 function cleanOutput(currentNumber) {
   let output_string = currentNumber.toString();
   let output_array = output_string.split("");
+  output_string = output_string.split(".")[0];
   if (inserted_operations === 1) {
-    let decimal = output_string.split(".")[1];
-    output_string = output_string.split(".")[0];
-
-    if (output_array.length > 3) {
+    if (output_array.length > 3 && output_string.length > 3) {
       for (let i = output_array.length - 3; i > 0; i -= 3) {
         output_array.splice(i, 0, ",");
       }
-    }
-    if (decimal) {
-      output_array.push(".");
-      output_array.push(decimal);
     }
   }
   return output_array.join("");
@@ -161,7 +157,14 @@ function verifyOperation(value) {
 
 function getSecondNumber(input) {
   let numbers = input.split(`${verifyOperation(input)}`);
+  console.log(numbers[1]);
   return numbers[numbers.length - 1];
+}
+
+function getFirstNumber(input) {
+  let numbers = input.split(`${verifyOperation(input)}`);
+  console.log(numbers[0]);
+  return numbers[0];
 }
 
 calculator();
